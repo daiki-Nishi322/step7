@@ -18,6 +18,7 @@ class ProductController extends Controller
         $query = Product::query();
         $search = $request->search;
         $company_id = $request->input('company_id');
+        $companies = Company::all();
 
 
 
@@ -33,14 +34,15 @@ class ProductController extends Controller
 
         $products = $query->paginate(10);
 
-        $companies = Company::whereNull('deleted_at')->get();
+        // $companies = Company::whereNull('deleted_at')->get();
 
 
         // $companies = Company::whereDoesntHave('products', function ($query) {
         //     $query->whereNotNull('deleted_at');
         // })->get();
 
-        return view('products.index', compact('products','companies','company_id','search'));
+        // return view('products.index', compact('products','companies','company_id','search'));
+        return view('products.index', compact('products','company_id','search','companies'));
     }
 
 
@@ -104,7 +106,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('products.show',['product' => $product]);
+        $companies = Company::all();
+        return view('products.show',compact('product','companies'));
 
     }
 

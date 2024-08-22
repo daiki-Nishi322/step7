@@ -16,7 +16,7 @@ class CompanyFactory extends Factory
             'company_name' => $this->faker->company,
             'street_address' => $this->faker->streetAddress,
             'representative_name' => $this->faker->name,
-            // 'created_at' と 'updated_at' はEloquentが自動的に処理するので、ここに追加する必要はありません。
+
         ];
     }
 }

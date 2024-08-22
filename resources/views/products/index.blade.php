@@ -12,7 +12,7 @@
     <form action="{{ route('products.index') }}"  method="GET" class="row g-3">
 
 
-        <!-- 商品名検索用の入力欄 -->
+
         <div class="col-sm-12 col-md-3">
             <input type="text" name="search" class="form-control" placeholder="検索キーワード" value="{{ request('search') }}">
         </div>
@@ -34,10 +34,10 @@
         </div>
     </form>
 
-         <!-- 商品一覧を表示する部分 -->
-     @foreach($products as $product)
-         <!-- 商品情報を表示 -->
-     @endforeach
+
+    @foreach($products as $product)
+
+    @endforeach
 </div>
 
 
@@ -72,8 +72,7 @@
                         <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline" onsubmit="return confirmDelete()">
                             @csrf
                             @method('DELETE')
-                            {{-- <button type="submit" class="btn btn-danger btn-sm mx-1">削除</button> --}}
-                            <input type="submit" class="btn btn-danger btn-sm mx-1" value="削除" onclick='return confirm("本当に削除しますか？")''>
+                            <input type="submit" class="btn btn-danger btn-sm mx-1" value="削除" onclick='return confirm("本当に削除しますか？")'>
                         </form>
 
                     </td>
