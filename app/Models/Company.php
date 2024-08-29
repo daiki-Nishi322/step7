@@ -10,9 +10,8 @@ class Company extends Model
 {
 
     use HasFactory;
-    // use SoftDeletes;
 
-    // protected $dates = ['deleted_at'];
+    
 
     public function products()
     {

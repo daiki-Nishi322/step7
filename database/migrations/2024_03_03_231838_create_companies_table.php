@@ -6,11 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
@@ -19,15 +15,11 @@ return new class extends Migration
             $table->string('street_address');
             $table->string('representative_name');
             $table->timestamps();
-            
+
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+ 
     public function down()
     {
         Schema::dropIfExists('companies');
