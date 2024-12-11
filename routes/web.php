@@ -35,4 +35,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('products/{product}/edit',[ProductController::class, 'edit'])->name('products.edit');
     Route::put('products/{product}',[ProductController::class, 'update'])->name('products.update');
     Route::delete('products/{product}',[ProductController::class, 'destroy'])->name('products.destroy');
+    Route::get('products/search',[ProductController::class, 'index'])->name('products.search');
+    Route::resource('products', ProductController::class);
 });

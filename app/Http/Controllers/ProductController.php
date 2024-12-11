@@ -16,8 +16,6 @@ class ProductController extends Controller
         $company_id = $request->input('company_id');
         $companies = Company::all();
 
-
-
         if ($search) {
             $query->where('product_name', 'LIKE', "%" . $search . "%");
         }
@@ -26,9 +24,37 @@ class ProductController extends Controller
             $query->where('company_id', $company_id);
         }
 
+        if($min_price = $request->min_price){
+            $query->where('price', '>=', $min_price);
+        }
+
+        if($max_price = $request->max_price){
+            $query->where('price', '<=', $max_price);
+        }
+
+        if($min_stock = $request->min_stock){
+            $query->where('stock', '>=', $min_stock);
+        }
+
+        if($max_stock = $request->max_stock){
+            $query->where('stock', '<=', $max_stock);
+        }
+
+
+        if($sort = $request->sort){
+            $direction = $request->direction == 'desc' ? 'desc' : 'asc';
+            $query->orderBy($sort, $direction);
+        }
+
+
+
 
 
         $products = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('products._list', compact('products'))->render();
+        }
 
         return view('products.index', compact('products', 'company_id', 'search', 'companies'));
     }
@@ -103,11 +129,11 @@ class ProductController extends Controller
             'company_id' => 'required',
             'price' => 'required',
             'stock' => 'required',
-        ],[
-            'product_name.required' =>'商品名を入力してください',
-            'company_id.required' =>'メーカー名を選択してください',
-            'price.required' =>'価格を入力してください',
-            'stock.required' =>'在庫数を入力してください',
+        ], [
+            'product_name.required' => '商品名を入力してください',
+            'company_id.required' => 'メーカー名を選択してください',
+            'price.required' => '価格を入力してください',
+            'stock.required' => '在庫数を入力してください',
         ]);
 
         $product->product_name = $request->product_name;
@@ -126,12 +152,16 @@ class ProductController extends Controller
     {
         $company = $product->company;
 
+        $product->sales()->delete();
+
         $product->delete();
 
         if ($company->products()->count() === 0) {
             $company->delete();
         }
 
-        return redirect('/products');
+        return response()->json(['message' => 'Product and associated sales (and company if no more products) deleted successfully']);
     }
+
+
 }

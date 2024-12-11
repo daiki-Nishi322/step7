@@ -1,93 +1,116 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1 class="mb-4">商品一覧画面</h1>
+    <div class="container">
+        <h1 class="mb-4">商品一覧画面</h1>
+
+        <div class="search mt-5">
+
+            <form id="searchForm" action="{{ route('products.index') }}" method="GET" class="row g-3">
+
+                <div class="col-sm-12 col-md-2">
+                    <input type="text" name="search" class="form-control" placeholder="検索キーワード"
+                        value="{{ request('search') }}">
+                </div>
 
 
-<div class="search mt-5">
+                <div class="col-sm-12 col-md-2">
+                    <select name="company_id" class="form-control">
+                        <option value="">メーカー名を選択</option>
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->id }}" {{ $company_id == $company->id ? 'selected' : '' }}>
+                                {{ $company->company_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
+                <div class="col-sm-12 col-md-2">
+                    <input type="number" name="min_price" class="form-control" placeholder="最小価格"
+                        value="{{ request('min_price') }}">
+                </div>
 
+                <div class="col-sm-12 col-md-2">
+                    <input type="number" name="max_price" class="form-control" placeholder="最大価格"
+                        value="{{ request('max_price') }}">
+                </div>
 
-    <form action="{{ route('products.index') }}"  method="GET" class="row g-3">
+                <div class="col-sm-12 col-md-2">
+                    <input type="number" name="min_stock" class="form-control" placeholder="最小在庫"
+                        value="{{ request('min_stock') }}">
+                </div>
 
-
-
-        <div class="col-sm-12 col-md-3">
-            <input type="text" name="search" class="form-control" placeholder="検索キーワード" value="{{ request('search') }}">
-        </div>
-
-
-        <div class="col-sm-12 col-md-3">
-            <select name="company_id" class="form-control">
-                <option value="" >メーカー名を選択</option>
-                @foreach($companies as $company)
-                <option value="{{ $company->id }}" {{ $company_id == $company->id ? 'selected' : '' }}>
-                    {{ $company->company_name }}
-                </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="col-sm-12 col-md-3">
-            <button class="btn btn-outline-secondary" type="submit">検索</button>
-        </div>
-    </form>
-
-
-    @foreach($products as $product)
-
-    @endforeach
-</div>
+                <div class="col-sm-12 col-md-2">
+                    <input type="number" name="max_stock" class="form-control" placeholder="最大在庫"
+                        value="{{ request('max_stock') }}">
+                </div>
 
 
 
 
 
-    <div class="products mt-5">
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>商品画像</th>
-                    <th>商品名</th>
-                    <th>価格</th>
-                    <th>在庫数</th>
-                    <th>メーカー名</th>
-                    <th><a href="{{ route('products.create') }}" class="btn btn-warning ">新規登録</a></th>
-                </tr>
-            </thead>
-            <tbody>
+                <div class="col-sm-12 col-md-3">
+                    <button class="btn btn-outline-secondary" type="submit">検索</button>
+                </div>
+            </form>
+
+            <a href="{{ route('products.index') }}" class="btn btn-success mt-3">検索条件を元に戻す</a>
+
+
             @foreach ($products as $product)
-                <tr>
-                    <td>{{ $product->id }}</td>
-                    <td><img src="{{ asset($product->img_path) }}" alt="商品画像" width="100"></td>
-                    <td>{{ $product->product_name }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>{{ $product->company->company_name }}</td>
-                    <td>
-                        <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細</a>
-                        <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline" onsubmit="return confirmDelete()">
-                            @csrf
-                            @method('DELETE')
-                            <input type="submit" class="btn btn-danger btn-sm mx-1" value="削除" onclick='return confirm("本当に削除しますか？")'>
-                        </form>
-
-                    </td>
-                </tr>
             @endforeach
+        </div>
 
 
-            </tbody>
-        </table>
+
+        <div id="productsList" class="products mt-5">
+            @include('products.list',['products' => $products])
+        </div>
+
+
+
+
+
     </div>
-
-    {{ $products->appends(request()->query())->links() }}
-
-
-</div>
-
-
 @endsection
+
+
+<script>
+    $(document).ready(function(){
+        $('#searchForm').on('submit', function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: "{{ route('products.index') }}",
+                type: "GET",
+                data: $(this).serialize(),
+                success: function(response){
+                    $('#productsList').html(response);
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+        $(document).on('submit', '.pagination a', function(e){
+            e.preventDefault();
+
+            var form = $(this);
+            var id = form.data('id');
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response){
+                    form.closest('tr').remove();
+                },
+                error: function(xhr){
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+    </script>
