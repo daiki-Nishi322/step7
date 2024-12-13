@@ -14,12 +14,8 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
 </head>
@@ -83,5 +79,17 @@
             @yield('content')
         </main>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+
+
+    <script>
+        $(document).ready(function() {
+            console.log("jQuery is loaded and ready!");
+        });
+    </script>
 </body>
 </html>

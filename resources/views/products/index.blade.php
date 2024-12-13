@@ -28,7 +28,7 @@
                 <div class="col-sm-12 col-md-2">
                     <input type="number" name="min_price" class="form-control" placeholder="最小価格"
                         value="{{ request('min_price') }}">
-                </div>
+                </div>it
 
                 <div class="col-sm-12 col-md-2">
                     <input type="number" name="max_price" class="form-control" placeholder="最大価格"

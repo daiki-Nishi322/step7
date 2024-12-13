@@ -160,7 +160,7 @@ class ProductController extends Controller
             $company->delete();
         }
 
-        return response()->json(['message' => 'Product and associated sales (and company if no more products) deleted successfully']);
+        return redirect()->route('products.index');
     }
 
 

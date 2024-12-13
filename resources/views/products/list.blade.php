@@ -1,11 +1,19 @@
+
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
             <th>商品画像</th>
             <th>商品名</th>
-            <th>価格</th>
-            <th>在庫数</th>
+            <th>価格
+                <a href="{{ request()->fullUrlWithQuery(['sort' => 'price', 'direction' => 'asc']) }}">↑</a>
+                <a href="{{ request()->fullUrlWithQuery(['sort' => 'price', 'direction' => 'desc']) }}">↓</a>
+            </th>
+            <th>在庫数
+                <a href="{{ request()->fullUrlWithQuery(['sort' => 'stock', 'direction' => 'asc']) }}">↑</a>
+                <a href="{{ request()->fullUrlWithQuery(['sort' => 'stock', 'direction' => 'desc']) }}">↓</a>
+            </th>
             <th>メーカー名</th>
             <th><a href="{{ route('products.create') }}" class="btn btn-warning">新規登録</a></th>
         </tr>
