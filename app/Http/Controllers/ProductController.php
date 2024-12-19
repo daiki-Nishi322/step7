@@ -47,13 +47,10 @@ class ProductController extends Controller
         }
 
 
-
-
-
         $products = $query->paginate(10);
 
         if ($request->ajax()) {
-            return view('products._list', compact('products'))->render();
+            return view('products.list', compact('products'))->render();
         }
 
         return view('products.index', compact('products', 'company_id', 'search', 'companies'));

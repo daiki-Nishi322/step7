@@ -28,7 +28,7 @@
                 <div class="col-sm-12 col-md-2">
                     <input type="number" name="min_price" class="form-control" placeholder="最小価格"
                         value="{{ request('min_price') }}">
-                </div>it
+                </div>
 
                 <div class="col-sm-12 col-md-2">
                     <input type="number" name="max_price" class="form-control" placeholder="最大価格"
@@ -58,59 +58,64 @@
             <a href="{{ route('products.index') }}" class="btn btn-success mt-3">検索条件を元に戻す</a>
 
 
-            @foreach ($products as $product)
-            @endforeach
+
         </div>
 
 
 
         <div id="productsList" class="products mt-5">
-            @include('products.list',['products' => $products])
+            @include('products.list', ['products' => $products])
         </div>
-
-
-
-
-
     </div>
 @endsection
 
-
-<script>
-    $(document).ready(function(){
-        $('#searchForm').on('submit', function(e){
-            e.preventDefault();
-
-            $.ajax({
-                url: "{{ route('products.index') }}",
-                type: "GET",
-                data: $(this).serialize(),
-                success: function(response){
-                    $('#productsList').html(response);
-                },
-                error: function(xhr){
-                    console.log(xhr.responseText);
+@section('scripts')
+    <script>
+        var $ = jQuery.noConflict();
+        $(document).ready(function() {
+            console.log("jQuery is loaded and ready!");
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-        });
 
-        $(document).on('submit', '.pagination a', function(e){
-            e.preventDefault();
+            $('#searchForm').on('submit', function(e) {
+                e.preventDefault();
 
-            var form = $(this);
-            var id = form.data('id');
+                $.ajax({
+                    url: "{{ route('products.index') }}",
+                    type: "GET",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#productsList').html(response);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
 
-            $.ajax({
-                url: form.attr('action'),
-                type: 'POST',
-                data: form.serialize(),
-                success: function(response){
-                    form.closest('tr').remove();
-                },
-                error: function(xhr){
-                    console.log(xhr.responseText);
-                }
+            $(document).on('click', '.delete-button', function(e) {
+                e.preventDefault();
+
+                var form = $(this).closest('form');
+                console.log("Form action:", form.attr('action'));
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        console.log("Delete request successful.");
+                        form.closest('tr').remove();
+                    },
+                    error: function(xhr) {
+                        console.log("Delete request failed.");
+                        console.log(xhr.responseText);
+                    }
+                });
             });
         });
-    });
     </script>
+@endsection

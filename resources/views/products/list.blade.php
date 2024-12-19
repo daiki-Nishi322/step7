@@ -29,7 +29,7 @@
                 <td>{{ $product->company->company_name }}</td>
                 <td>
                     <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細</a>
-                    <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline delete-form" data-id="{{ $product->id }}">
+                    <form method="POST" action="{{ route('products.destroy', $product) }}" class="delete-button" data-id="{{ $product->id }}">
                         @csrf
                         @method('DELETE')
                         <input type="submit" class="btn btn-danger btn-sm mx-1" value="削除" onclick='return confirm("本当に削除しますか？")'>
