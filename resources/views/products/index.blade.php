@@ -67,13 +67,11 @@
             @include('products.list', ['products' => $products])
         </div>
     </div>
-@endsection
 
-@section('scripts')
+
     <script>
-        var $ = jQuery.noConflict();
         $(document).ready(function() {
-            console.log("jQuery is loaded and ready!");
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

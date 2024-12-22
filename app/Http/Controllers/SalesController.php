@@ -62,12 +62,9 @@ class SalesController extends Controller
 public function yourMethod()
 {
     try {
-        // ここにコードを記述
     } catch (\Exception $e) {
-        // エラーをログに記録
         Log::error('エラーが発生しました: '.$e->getMessage());
 
-        // クライアントに一般的なエラーメッセージを返す
         return response()->json(['error' => '内部サーバーエラー'], 500);
     }
 }
